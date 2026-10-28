@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bewerbung – Werde Teil des Teams</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --dirt: #7a5233;
+    --dirt-dark: #5b3b23;
+    --grass: #5fa13a;
+    --grass-dark: #3f7a25;
+    --stone: #8b8b8b;
+    --stone-dark: #5c5c5c;
+    --stone-light: #c6c6c6;
+    --ink: #1e1e1e;
+    --gold: #ffd84a;
+    --paper: #e8e0cc;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: 'VT323', 'Courier New', monospace;
+    font-size: 22px;
+    line-height: 1.35;
+    color: var(--ink);
+    background-color: var(--dirt);
+    background-image:
+      linear-gradient(45deg, var(--dirt-dark) 25%, transparent 25%, transparent 75%, var(--dirt-dark) 75%),
+      linear-gradient(45deg, var(--dirt-dark) 25%, transparent 25%, transparent 75%, var(--dirt-dark) 75%);
+    background-size: 64px 64px;
+    background-position: 0 0, 32px 32px;
+    min-height: 100vh;
+  }
+  .grass {
+    height: 40px;
+    background:
+      repeating-linear-gradient(90deg, var(--grass) 0 32px, var(--grass-dark) 32px 64px);
+    border-bottom: 8px solid #4a3220;
+  }
+  h1, h2, .pixel { font-family: 'Press Start 2P', 'Courier New', monospace; font-weight: 400; }
+  header { text-align: center; padding: 48px 16px 24px; }
+  h1 {
+    margin: 0 0 20px;
+    font-size: clamp(22px, 5vw, 44px);
+    line-height: 1.4;
+    color: #fff;
+    text-shadow: 4px 4px 0 #3a3a3a, 8px 8px 0 rgba(0,0,0,.35);
+  }
+  header p {
+    display: inline-block;
+    margin: 0;
+    padding: 8px 16px;
+    background: rgba(0,0,0,.55);
+    color: var(--gold);
+    font-size: 24px;
+  }
+  main { max-width: 760px; margin: 0 auto; padding: 16px 16px 64px; }
+
+  .panel {
+    background: var(--stone-light);
+    border: 4px solid var(--ink);
+    box-shadow: inset 4px 4px 0 #fff, inset -4px -4px 0 var(--stone-dark), 8px 8px 0 rgba(0,0,0,.4);
+    padding: 28px;
+    margin-bottom: 28px;
+  }
+  h2 { font-size: 16px; margin: 0 0 20px; line-height: 1.6; }
+  .jobs { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+  .job {
+    background: var(--paper);
+    border: 3px solid var(--stone-dark);
+    padding: 12px;
+  }
+  .job b { font-family: 'Press Start 2P', monospace; font-size: 12px; font-weight: 400; display: block; margin-bottom: 8px; line-height: 1.5; }
+
+  label { display: block; margin: 18px 0 6px; font-size: 24px; }
+  input[type=text], input[type=number], input[type=password], select, textarea {
+    width: 100%;
+    font: inherit;
+    font-size: 24px;
+    padding: 10px 12px;
+    color: #fff;
+    background: #1b1b1b;
+    border: 4px solid var(--stone-dark);
+    border-top-color: #000;
+    border-left-color: #000;
+    border-radius: 0;
+  }
+  textarea { min-height: 140px; resize: vertical; }
+  input:focus, select:focus, textarea:focus, button:focus-visible {
+    outline: 4px solid var(--gold);
+    outline-offset: 0;
+  }
+  .check { display: flex; gap: 12px; align-items: flex-start; margin-top: 22px; }
+  .check input { width: 26px; height: 26px; margin-top: 4px; accent-color: var(--grass-dark); flex: none; }
+  .check label { margin: 0; font-size: 22px; }
+
+  button {
+    margin-top: 28px;
+    width: 100%;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 14px;
+    padding: 18px 12px;
+    color: #fff;
+    background: var(--grass);
+    border: 4px solid var(--ink);
+    border-radius: 0;
+    box-shadow: inset 4px 4px 0 #8fd161, inset -4px -4px 0 var(--grass-dark);
+    text-shadow: 3px 3px 0 #2c5a18;
+    cursor: pointer;
+  }
+  button:hover { background: #6db843; }
+  button:active { box-shadow: inset -4px -4px 0 #8fd161, inset 4px 4px 0 var(--grass-dark); }
+  button:disabled { background: var(--stone); box-shadow: none; cursor: wait; }
+
+  .hp { position: absolute; left: -9999px; }
+  #status { display: none; margin-top: 20px; padding: 14px; border: 4px solid var(--ink); font-size: 24px; }
+  #status.ok, #loginStatus.ok { display: block; background: #b7e89b; }
+  #status.err, #loginStatus.err { display: block; background: #f0a3a3; }
+  #loginStatus { display: none; margin-top: 20px; padding: 14px; border: 4px solid var(--ink); font-size: 24px; }
+  .app { background: var(--paper); border: 3px solid var(--stone-dark); padding: 14px; margin-top: 14px; }
+  .app h3 { font-family: 'Press Start 2P', monospace; font-weight: 400; font-size: 12px; line-height: 1.6; margin: 0 0 8px; }
+  .app p { margin: 4px 0; white-space: pre-wrap; overflow-wrap: anywhere; }
+  .app small { color: #555; }
+  .small-btn { width: auto; margin: 10px 0 0; padding: 10px 14px; font-size: 11px; background: #b94a3a; box-shadow: inset 3px 3px 0 #e07a68, inset -3px -3px 0 #7f2d21; text-shadow: 2px 2px 0 #561d15; }
+  .small-btn:hover { background: #c95a4a; }
+  .link-btn { all: unset; cursor: pointer; text-decoration: underline; }
+  .link-btn:focus-visible { outline: 3px solid var(--gold); }
+  footer { text-align: center; color: #fff; padding-bottom: 32px; text-shadow: 2px 2px 0 #000; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+</style>
+</head>
+<body>
+<div class="grass"></div>
+
+<header>
+  <h1>Werde Teil<br>unseres Teams</h1>
+  <p>Wir suchen neue Mitglieder. Bewirb dich jetzt!</p>
+</header>
+
+<main>
+  <section class="panel">
+    <h2>Offene Rollen</h2>
+    <div class="jobs">
+      <div class="job"><b>Builder</b>Du baust Welten, Gebäude und Landschaften.</div>
+      <div class="job"><b>Moderator</b>Du sorgst für Ruhe und faires Spiel.</div>
+      <div class="job"><b>Developer</b>Du programmierst Plugins, Mods und Tools.</div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2>Deine Bewerbung</h2>
+    <form id="form" novalidate>
+      <input type="checkbox" name="botcheck" class="hp" tabindex="-1" autocomplete="off">
+
+      <label for="mc">Minecraft-Name</label>
+      <input id="mc" name="mc_name" type="text" required maxlength="40">
+
+      <label for="age">Alter</label>
+      <input id="age" name="age" type="number" min="5" max="99" required>
+
+      <label for="dc">Discord-Name</label>
+      <input id="dc" name="discord" type="text" required maxlength="60">
+
+      <label for="role">Als was möchtest du dich bewerben?</label>
+      <select id="role" name="role" required>
+        <option value="">Bitte wählen</option>
+        <option>Builder</option>
+        <option>Moderator</option>
+        <option>Developer</option>
+        <option>Etwas anderes</option>
+      </select>
+
+      <label for="exp">Deine Erfahrung</label>
+      <textarea id="exp" name="experience" required maxlength="1500"></textarea>
+
+      <label for="why">Warum sollen wir dich nehmen?</label>
+      <textarea id="why" name="motivation" required maxlength="1500"></textarea>
+
+      <div class="check">
+        <input id="ok" type="checkbox" required>
+        <label for="ok">Ich bin einverstanden, dass meine Angaben für die Bewerbung gespeichert werden.</label>
+      </div>
+
+      <button type="submit" id="btn">Bewerbung abschicken</button>
+      <div id="status" role="status"></div>
+    </form>
+  </section>
+</main>
+
+<main id="admin" hidden>
+  <section class="panel" id="loginBox">
+    <h2>Admin Panel</h2>
+    <form id="loginForm">
+      <label for="u">Username</label>
+      <input id="u" type="text" autocomplete="username" required>
+      <label for="pw">Passwort</label>
+      <input id="pw" type="password" autocomplete="current-password" required>
+      <button type="submit">Einloggen</button>
+      <div id="loginStatus" role="status"></div>
+    </form>
+  </section>
+  <section class="panel" id="listBox" hidden>
+    <h2>Bewerbungen (<span id="count">0</span>)</h2>
+    <div id="list"></div>
+    <button type="button" id="logout">Ausloggen</button>
+  </section>
+</main>
+
+<footer>Eigenhändige Website · <button class="link-btn" id="adminLink" type="button">Admin</button></footer>
+
+<script>
+  // ===== HIER EINTRAGEN (siehe Anleitung) =====
+  const SB_URL = 'https://vradxayyyhhgitsovazn.supabase.co';        // z.B. https://abcdxyz.supabase.co
+  const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZyYWR4YXl5eWhoZ2l0c292YXpuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTMyMDU4MTMsImV4cCI6MjEwODc4MTgxM30.98C8U4iTPNGpwar63P1nsMqKGr3kDC1wwjlNUuXkjp4';
+  const ADMIN_USERNAME = 'Administrator*';
+  const ADMIN_EMAIL = 'soundhelpyt@gmail.com';       // E-Mail des Admin-Users in Supabase
+  // ============================================
+
+  const $ = (id) => document.getElementById(id);
+  const form = $('form'), btn = $('btn'), status = $('status');
+  let token = null;
+
+  function show(type, text) { status.className = type; status.textContent = text; }
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!form.checkValidity()) { form.reportValidity(); return; }
+    if (form.botcheck.checked) return;
+    btn.disabled = true; btn.textContent = 'Wird gesendet ...';
+    const f = new FormData(form);
+    const body = {
+      mc_name: f.get('mc_name'), age: parseInt(f.get('age'), 10), discord: f.get('discord'),
+      role: f.get('role'), experience: f.get('experience'), motivation: f.get('motivation')
+    };
+    try {
+      const res = await fetch(SB_URL + '/rest/v1/applications', {
+        method: 'POST',
+        headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
+        body: JSON.stringify(body)
+      });
+      if (res.ok) { form.reset(); show('ok', 'Bewerbung abgeschickt! Wir melden uns bei dir.'); }
+      else show('err', 'Das hat nicht geklappt. Bitte versuche es nochmal.');
+    } catch (err) {
+      show('err', 'Keine Verbindung. Prüfe dein Internet und versuche es nochmal.');
+    }
+    btn.disabled = false; btn.textContent = 'Bewerbung abschicken';
+  });
+
+  // ---- Admin ----
+  function toggleAdmin(on) {
+    document.querySelector('main:not(#admin)').hidden = on;
+    $('admin').hidden = !on;
+    $('adminLink').textContent = on ? 'Zurück zur Bewerbung' : 'Admin';
+    window.scrollTo(0, 0);
+  }
+  $('adminLink').addEventListener('click', () => toggleAdmin($('admin').hidden));
+
+  $('loginForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const st = $('loginStatus');
+    const fail = (t) => { st.className = 'err'; st.textContent = t; };
+    if (SB_URL.startsWith('DEINE') || SB_KEY.startsWith('DEIN') || ADMIN_EMAIL === 'deine@email.de') {
+      fail('Supabase ist noch nicht eingetragen. Ändere SB_URL, SB_KEY und ADMIN_EMAIL ganz oben in index.html.'); return;
+    }
+    if ($('u').value !== ADMIN_USERNAME) { fail('Username falsch.'); return; }
+    try {
+      const res = await fetch(SB_URL + '/auth/v1/token?grant_type=password', {
+        method: 'POST',
+        headers: { 'apikey': SB_KEY, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: ADMIN_EMAIL, password: $('pw').value })
+      });
+      const data = await res.json();
+      if (!res.ok || !data.access_token) {
+        fail('Login abgelehnt: ' + (data.error_description || data.msg || data.message || 'Unbekannter Fehler'));
+        return;
+      }
+      token = data.access_token;
+      $('pw').value = '';
+      st.className = ''; st.textContent = '';
+      $('loginBox').hidden = true; $('listBox').hidden = false;
+      loadApps();
+    } catch (err) { fail('Keine Verbindung zu Supabase. Prüfe SB_URL (muss mit https:// beginnen).'); }
+  });
+
+  function authHeaders() { return { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + token }; }
+
+  async function loadApps() {
+    const res = await fetch(SB_URL + '/rest/v1/applications?select=*&order=created_at.desc', { headers: authHeaders() });
+    if (!res.ok) { logout(); return; }
+    const rows = await res.json();
+    $('count').textContent = rows.length;
+    const list = $('list'); list.textContent = '';
+    if (!rows.length) { list.textContent = 'Noch keine Bewerbungen.'; return; }
+    rows.forEach((r) => {
+      const d = document.createElement('div'); d.className = 'app';
+      const h = document.createElement('h3'); h.textContent = r.mc_name + ' – ' + r.role; d.appendChild(h);
+      const meta = document.createElement('p'); const sm = document.createElement('small');
+      sm.textContent = 'Alter: ' + r.age + ' | Discord: ' + r.discord + ' | ' + new Date(r.created_at).toLocaleString('de-DE');
+      meta.appendChild(sm); d.appendChild(meta);
+      [['Erfahrung', r.experience], ['Warum', r.motivation]].forEach(([k, v]) => {
+        const p = document.createElement('p'); p.textContent = k + ': ' + v; d.appendChild(p);
+      });
+      const del = document.createElement('button'); del.type = 'button'; del.className = 'small-btn'; del.textContent = 'Löschen';
+      del.addEventListener('click', async () => {
+        if (!confirm('Bewerbung von ' + r.mc_name + ' löschen?')) return;
+        await fetch(SB_URL + '/rest/v1/applications?id=eq.' + r.id, { method: 'DELETE', headers: authHeaders() });
+        loadApps();
+      });
+      d.appendChild(del); list.appendChild(d);
+    });
+  }
+
+  function logout() {
+    token = null; $('list').textContent = '';
+    $('listBox').hidden = true; $('loginBox').hidden = false;
+  }
+  $('logout').addEventListener('click', logout);
+</script>
+</body>
+</html>
